@@ -1,0 +1,54 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Move Files</title>
+        <link rel="stylesheet" href="{% static 'style.css' %}">
+    </head>
+    <body>
+        <div>
+            <nav class="topnav">
+            <a href="{% url 'create_bucket'%}">Create Bucket</a>
+            <a href="{% url 'list_buckets'%}">List Buckets</a>
+            <a href="{% url 'upload_file'%}">Upload Files</a>
+            <a href="{% url 'list_files' %}">List Files</a>
+            <a href="{% url 'delete_files'%}">Delete File</a>
+            <a href="{% url 'copy_files'%}">Copy Files</a>
+            <a href="{% url 'move_files'%}">Move Files</a>
+            <a href="{% url 'create_folder'%}">Create Folder</a>
+        </nav>
+        </div>
+        {% include 'messages.html' %}
+        <h1>Copy Files from S3 Bucket</h1>
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            <label for="source_bucket">Source Bucket:</label>
+            <select name="source_bucket" required>
+                {% for bucket in buckets %}
+                <option value="{{bucket}}">{{bucket}}</option>
+                {% endfor %}
+            </select>
+            <br>
+            <button type="submit" name="action" value="get_files">Get Files</button>
+            </form>
+            <form method="post">
+            {% csrf_token %}
+            <input type="hidden" name="selected_bucket" value="{{source_bucket}}">
+            <h2>Select Files to Copy:</h2>
+            {% for file_key in source_files %}
+            <input type="checkbox" name="selected_files" value="{{file_key}}">{{file_key}}<br>
+            {% endfor %}
+            <br>
+            <label for="destination_bucket">Destination Bucket:</label>
+            <select name="destination_bucket" required>
+                {% for bucket in buckets %}
+                <option value="{{bucket}}">{{bucket}}</option>
+                {% endfor %}
+            </select>
+            <br><br>
+            <button type="submit" name="action" value="move_files">Move Files</button>
+        </form>
+        <br>
+    </body>
+</html>

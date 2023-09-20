@@ -1,0 +1,40 @@
+{% load static %}
+
+
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Create Folder</title>
+        <link rel="stylesheet" href="{% static 'style.css' %}">
+    </head>
+    <body>
+        <div>
+            <nav class="topnav">
+            <a href="{% url 'create_bucket'%}">Create Bucket</a>
+            <a href="{% url 'list_buckets'%}">List Buckets</a>
+            <a href="{% url 'upload_file'%}">Upload Files</a>
+            <a href="{% url 'list_files' %}">List Files</a>
+            <a href="{% url 'delete_files'%}">Delete File</a>
+            <a href="{% url 'copy_files'%}">Copy Files</a>
+            <a href="{% url 'move_files'%}">Move Files</a>
+            <a href="{% url 'create_folder'%}">Create Folder</a>
+        </nav>
+        </div>
+        {% include 'messages.html' %}
+        <h1>Create Folder in S3 Bucket</h1>
+        <form method="post">
+            {% csrf_token %}
+            <label for="selected_bucket">Select Bucket</label>
+            <select name = "selected_bucket" required>
+                {% for bucket in buckets %}
+                <option value="{{bucket}}">{{bucket}}</option>
+                {% endfor %}
+            </select>
+            <br><br>
+            <label for = "folder_name">Folder Name:</label>
+            <input type="text" name="folder_name" required>
+            <br><br>
+            <button type="submit">Create Folder</button>
+        </form>
+    </body>
+</html>

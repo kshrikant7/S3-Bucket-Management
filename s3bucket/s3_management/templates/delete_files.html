@@ -1,0 +1,48 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Delete Files</title>
+        <link rel="stylesheet" href="{% static 'style.css' %}">
+    </head>
+    <body>
+        <div>
+            <nav class="topnav">
+            <a href="{% url 'create_bucket'%}">Create Bucket</a>
+            <a href="{% url 'list_buckets'%}">List Buckets</a>
+            <a href="{% url 'upload_file'%}">Upload Files</a>
+            <a href="{% url 'list_files' %}">List Files</a>
+            <a href="{% url 'delete_files'%}">Delete File</a>
+            <a href="{% url 'copy_files'%}">Copy Files</a>
+            <a href="{% url 'move_files'%}">Move Files</a>
+            <a href="{% url 'create_folder'%}">Create Folder</a>
+        </nav>
+        </div>
+        {% include 'messages.html' %}
+        <h1>Delete Files in S3 Buckets</h1>
+
+        {% if buckets %}
+
+        <form method="post">
+            {% csrf_token %}
+
+            {% for bucket_name, files in buckets.items %}
+            <h2>
+                <h2><li> {{bucket_name}}</li></h2>
+            </ol>
+            <ul>
+                {% for file in files %}
+                <li>
+                    {{ file }}
+                    <button type="submit" name="action" value="{{bucket_name}} | {{file}}">Delete</button>
+                </li>
+                {% endfor %}
+            </ul>
+            {% endfor %}
+        </form>
+        {% else %}
+        <p>No Buckets found</p>
+        {% endif %}
+
+        </body>
+        </html>

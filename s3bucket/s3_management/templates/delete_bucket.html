@@ -1,0 +1,35 @@
+{% load static %}
+
+<!DOCTYPE html>
+
+
+<html>
+<head>
+    <title>Delete Bucket</title>
+    <link rel="stylesheet" href="{% static 'style.css' %}">
+</head>
+<body>
+    <div>
+        <nav class="topnav">
+        <a href="{% url 'create_bucket'%}">Create Bucket</a>
+        <a href="{% url 'list_buckets'%}">List Buckets</a>
+        <a href="{% url 'upload_file'%}">Upload Files</a>
+        <a href="{% url 'list_files' %}">List Files</a>
+        <a href="{% url 'delete_files'%}">Delete File</a>
+        <a href="{% url 'copy_files'%}">Copy Files</a>
+        <a href="{% url 'move_files'%}">Move Files</a>
+        <a href="{% url 'create_folder'%}">Create Folder</a>
+    </nav>
+    </div>
+    {% include 'messages.html' %}
+    <h1>Delete S3 Bucket</h1>
+    <p>Are you sure you want to delete the following S3 bucket?</p>
+    <p><strong>Bucket Name:</strong> {{ bucket_name }}</p>
+
+    <form method="post">
+        {% csrf_token %}
+        <input type="submit" value="Delete">
+    </form>
+    
+</body>
+</html>

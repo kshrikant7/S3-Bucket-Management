@@ -1,0 +1,45 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>List Files</title>
+        <link rel="stylesheet" href="{% static 'style.css' %}">
+    </head>
+    <body>
+        <div>
+            <nav class="topnav">
+            <a href="{% url 'create_bucket'%}">Create Bucket</a>
+            <a href="{% url 'list_buckets'%}">List Buckets</a>
+            <a href="{% url 'upload_file'%}">Upload Files</a>
+            <a href="{% url 'list_files' %}">List Files</a>
+            <a href="{% url 'delete_files'%}">Delete File</a>
+            <a href="{% url 'copy_files'%}">Copy Files</a>
+            <a href="{% url 'move_files'%}">Move Files</a>
+            <a href="{% url 'create_folder'%}">Create Folder</a>
+        </nav>
+        </div>
+        {% include 'messages.html' %}
+        <h1>List Files in S3 Bucket</h1>
+        <form method = "post">
+            {% csrf_token %}
+
+            <label for="bucket_name">Selected Bucket:</label>
+            <select name="bucket_name" required>
+                {% for bucket in buckets %}
+                <option value="{{bucket.0}}">{{bucket.1}}</option>
+                {% endfor %}
+            </select>
+
+            <button type="submit" name="action" value="list_files">List Files</button>
+        </form>
+        {% if files %}
+        <h2>Files in Selected Bucket:</h2>
+            <ol>
+                {% for file in files %}
+                <li>{{file}}</li>
+                {% endfor %}
+            </ol>
+        {% endif %}
+    </body>
+</html>

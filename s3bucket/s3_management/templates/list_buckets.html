@@ -1,0 +1,49 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>List Buckets</title>
+    <link rel="stylesheet" href="{% static 'style.css' %}">
+</head>
+<body>
+    <div>
+        <nav class="topnav">
+        <a href="{% url 'create_bucket'%}">Create Bucket</a>
+        <a href="{% url 'list_buckets'%}">List Buckets</a>
+        <a href="{% url 'upload_file'%}">Upload Files</a>
+        <a href="{% url 'list_files' %}">List Files</a>
+        <a href="{% url 'delete_files'%}">Delete File</a>
+        <a href="{% url 'copy_files'%}">Copy Files</a>
+        <a href="{% url 'move_files'%}">Move Files</a>
+        <a href="{% url 'create_folder'%}">Create Folder</a>
+    </nav>
+    </div>
+    {% include 'messages.html' %}
+    <h1>List S3 Buckets</h1>
+    <ul>
+        {% for bucket in buckets %}
+            <li>
+                {{ bucket.Name }}
+                <form method="post" action="{% url 'delete_bucket' %}">
+                    {% csrf_token %}
+                    <input type="hidden" name="bucket_name" value="{{bucket.Name}}">
+                    <button type="submit" name="action" value="delete_bucket">Delete</button>
+                </form>
+            </li>
+        {% endfor %}
+    </ul>
+    
+
+    <script>
+        const deleteButtons = document.querySelectorAll('[name="action"][value="delete_bucket"]');
+        deleteButtons.forEach(button => {
+            button.addEventListener('click',function(e){
+                if(!confirm('Are you sure you want to delete the bucket')){
+                    e.preventDefault();
+                }
+            });
+        });
+    </script>
+</body>
+</html>
